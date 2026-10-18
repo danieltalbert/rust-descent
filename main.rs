@@ -1,10 +1,10 @@
-// this is the classic y=mx+b
+// predict: the classic y = mx + b. Hand it the line and a pizza size, it hands back the guessed price.
 fn predict(slope: f64, intercept: f64, diameter: f64) -> f64 {
     slope * diameter + intercept
 }
 
 
-//dataset. super small, just 10 examples
+// pizza_data: the dataset. Ten pizzas with their sizes and real prices, the one source of truth every other function borrows.
 fn pizza_data() -> Vec<(f64, f64)> {
     vec![
         (6.0, 7.0),
@@ -20,6 +20,7 @@ fn pizza_data() -> Vec<(f64, f64)> {
     ]
 }
 
+// main: the conductor. It loads the data, trains the line, prints the guesses, the final cost, the answer key check, and the plot, in that order.
 fn main() {
     let slope = 1.0;
     let intercept = 1.0;
@@ -37,6 +38,8 @@ fn main() {
     print_plot(slope, intercept, &data);
 
 }
+
+// print_plot: the picture. Stars are real pizzas, dashes are my line running through them, so you can see the fit instead of just trusting numbers.
 fn print_plot(slope: f64, intercept: f64, data: &[(f64, f64)]) {
     for row in (0..=13).rev() {
         let band_low = row as f64 * 2.0;
@@ -59,6 +62,7 @@ fn print_plot(slope: f64, intercept: f64, data: &[(f64, f64)]) {
     }
 }
 
+// cost: the scorekeeper. It squares every miss so highs and lows can't cancel each other out, then averages them into one "how wrong is this line" number.
 fn cost(slope: f64, intercept: f64, data: &[(f64, f64)]) -> f64 {
     let mut total = 0.0;
     for point in data {
@@ -67,6 +71,8 @@ fn cost(slope: f64, intercept: f64, data: &[(f64, f64)]) -> f64 {
     }
     total / data.len() as f64
 }
+
+// gradient: the compass. It tells each knob which way is downhill and how steep it is, and for the slope knob each miss counts extra depending on the pizza's size.
 fn gradient(slope: f64, intercept: f64, data: &[(f64, f64)]) -> (f64, f64) {
     let mut slope_sum = 0.0;
     let mut intercept_sum = 0.0;
@@ -78,6 +84,8 @@ fn gradient(slope: f64, intercept: f64, data: &[(f64, f64)]) -> (f64, f64) {
     let n = data.len() as f64;
     (2.0 / n * slope_sum, 2.0 / n * intercept_sum)
 }
+
+// train: the learning loop. Ask the compass, take a small step downhill, repeat 5000 times until the line settles at the bottom.
 fn train(slope: f64, intercept: f64, data: &[(f64, f64)], learning_rate: f64, epochs: usize) -> (f64, f64) {
     let mut slope = slope;
     let mut intercept = intercept;
@@ -88,6 +96,8 @@ fn train(slope: f64, intercept: f64, data: &[(f64, f64)], learning_rate: f64, ep
     }
     (slope, intercept)
 }
+
+// closed_form: the answer key. It solves for the perfect line directly with the formula, so I can prove the learned line actually got there.
 fn closed_form(data: &[(f64, f64)]) -> (f64, f64) {
     let n = data.len() as f64;
     let mut sum_x = 0.0;
