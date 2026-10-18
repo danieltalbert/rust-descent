@@ -6,7 +6,7 @@ How it works: the program starts with a flat line (slope 0, intercept 0) and imp
 
 My purpose in writing this was to understand gradient descent from the inside out, and to learn Rust by building something real with it, instead of calling a library and trusting the magic.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/8wayaZDoeOM)
 
 # Development Environment
 
